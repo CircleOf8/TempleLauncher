@@ -42,7 +42,7 @@ namespace TempleStarter
             settings.MountedDirectories.Add(@"debug.txt",
                                             @"C:\Users\<user>\Documents\Temple of Elemental Evil\debug.txt");
 
-            settings.DataArchives.Add(Path.Combine(settings.InstallationDirectory, "co8.dat"));
+            // settings.DataArchives.Add(Path.Combine(settings.InstallationDirectory, "co8.dat"));
 
             var writeDirectory = Path.Combine(settings.InstallationDirectory,
                                               @"Circle of Eight Modpack 5.9.2 BETA - OUT");

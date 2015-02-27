@@ -30,7 +30,7 @@ namespace TempleExtender
             }
             else
             {
-                ImportAddressTable = new ImportAddressTable(Handle);
+               ImportAddressTable = new ImportAddressTable(Handle);
             }
         }
 
@@ -88,7 +88,32 @@ namespace TempleExtender
 
             return mainFunction(hInstance, IntPtr.Zero, commandLine, showNormal);
         }
-        
+
+        public T ReadStructure<T>(int offset)
+        {
+            if (!Valid)
+                throw new InvalidOperationException("The library is not loaded.");
+
+            var ptr = IntPtrUtil.Add(Handle, offset);
+
+            return (T) Marshal.PtrToStructure(ptr, typeof(T));
+        }
+
+        public void WriteStructure<T>(int offset, T structure)
+        {
+            if (!Valid)
+                throw new InvalidOperationException("The library is not loaded.");
+
+            var ptr = IntPtrUtil.Add(Handle, offset);
+
+            uint size = (uint) Marshal.SizeOf(structure);
+
+            Protection oldProtection;
+            Win32Api.VirtualProtect(ptr, size, Protection.ReadWrite, out oldProtection);
+            Marshal.StructureToPtr(structure, ptr, false);
+            Win32Api.VirtualProtect(ptr, size, oldProtection, out oldProtection);
+        }
+
         /// <summary>
         /// Reads a portion of memory in relation to the library start.
         /// </summary>
